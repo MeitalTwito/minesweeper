@@ -98,3 +98,41 @@ function markToggle(elCell, idxI, idxJ) {
   
 }
 
+// These functions control the stopwatch
+function startTimer() {
+  if (gStoptime) {
+      gStoptime = false;
+      timerCycle();
+  }
+}
+
+function stopTimer() {
+  if (!gStoptime) {
+      gStoptime = true;
+  }
+}
+
+function timerCycle() {
+  if (gStoptime == false) {
+      gSec = parseInt(gSec);
+
+
+      gSec++
+
+      if (gSec < 10) {
+          gSec = '0' + gSec;
+      }
+      if (gSec < 100) {
+        gSec = '0' + gSec;
+      }
+      timer.innerHTML = gSec;
+
+      setTimeout("timerCycle()", 1000);
+  }
+}
+
+function resetTimer() {
+  timer.innerHTML = '000';
+  gSec = 0;
+
+}

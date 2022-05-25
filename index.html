@@ -14,10 +14,19 @@
 
 <body onload="init()">
     <h1>Sprint 1 - MineSweeper</h1>
+    <div id="stopwatch" class="stopwatch">
+        000
+    </div>
+
     <div class="game-container">
         <table class="game-board" oncontextmenu="return false">
 
         </table>
+    </div>
+    <div class="level">
+        <button onclick="init(4,2)">Beginner</button>
+        <button onclick="init(8,12)">Medium</button>
+        <button onclick="init(12,30)">Expert</button>
     </div>
     <div class="rest">
         <h2>hello</h2>

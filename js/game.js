@@ -1,5 +1,11 @@
 'use strict'
 
+var gStartTime = 0;
+var gEndTime = 0;
+const timer = document.getElementById('stopwatch');
+var gSec = 0;
+var gStoptime = true;
+
 var MINE = '💥'
 var FLAG = '🚩'
 
@@ -8,17 +14,21 @@ var gBoard
 
 
 // Determins the Mat Size and number of mines
-var gLevel = {
-    SIZE: 4,
-    MINES: 2
-}
+var gLevel = {}
 
 // This is an object which updates the current game state:
 var gGame = {}
 var gIsVictory = false
 
-function init() {
+function init(size = 4, mineCount = 2) {
+    stopTimer()
+    resetTimer()
+    gLevel = {
+        SIZE: size,
+        MINES: mineCount
+    }
     gGame = {
+        isFirstClick: true,
         isOn: false,
         shownCount: 0,
         markedCount: 0,
@@ -30,11 +40,13 @@ function init() {
 
 function startGame(idxI,idxJ){
     gGame.isOn = true
+    startTimer();
     getMines(gBoard, gLevel.MINES,idxI,idxJ)
     setMinesNegsCount(gBoard)
     renderBoard(gBoard, '.game-board')
     showCell(idxI,idxJ)
     // console.log(gBoard);
+    
 }
 
 function buildBoard(size) {
@@ -76,7 +88,11 @@ function setMinesNegsCount(board) {
 }
 
 function cellClicked(elcell,idxI,idxJ) {
-    if (!gGame.isOn) startGame(idxI,idxJ)
+    if (gGame.isFirstClick){
+        gGame.isFirstClick = false
+        startGame(idxI,idxJ)
+    } 
+    if (!gGame.isOn) return
     var clickedCell = gBoard[idxI][idxJ]
     if (clickedCell.isShown) return
 
@@ -156,6 +172,8 @@ function checkVictory() {
 }
 
 function gameOver() {
+    gGame.isOn = false;
+    stopTimer()
     document.querySelector('.rest').style.display = 'inline'
     if (gIsVictory){
         document.querySelector('h2').innerText = 'You Win!'

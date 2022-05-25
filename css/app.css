@@ -1,7 +1,11 @@
-
+.stopwatch{
+  width: 710px;
+  text-align: right;
+  font-size: 30px;
+}
 .game-container {
-  width: 500px;
-  height: 500px;
+ width: 710px;
+ height: 710px;
 }
 
 table {
