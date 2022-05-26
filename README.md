@@ -1,2 +1,2 @@
 # minesweeper
-Sprint 1 - first submition
+Sprint 1 - Coding Academy May 2022
