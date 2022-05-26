@@ -112,7 +112,8 @@ function setMinesNegsCount(board) {
 }
 
 function cellClicked(elcell, idxI, idxJ) {
-
+    var clickedCell = gBoard[idxI][idxJ]
+    if (clickedCell.isMarked) return
     // Avoiding a Mine on first click
     if (gGame.isFirstClick) {
         gGame.isFirstClick = false
@@ -127,9 +128,9 @@ function cellClicked(elcell, idxI, idxJ) {
         return
     }
 
-    var clickedCell = gBoard[idxI][idxJ]
-    if (clickedCell.isShown) return // id cell is already open retrn
-
+    
+    if (clickedCell.isShown) return // if cell is already open return
+     // if cell is flaged return
     // If the cell clicked is a mine
     if (clickedCell.isMine) {
         // User has lives - make an alert sound and decrese lives
