@@ -68,7 +68,7 @@ body {
   background-color: #111111;
   box-shadow: 4px 2px 0px #2f2d2d inset;
   text-align: center;
-  font-size: 2.5em;
+  font-size: 3em;
   line-height: 74px;
 }
 
@@ -83,7 +83,7 @@ body {
 
 .game-board td {
   color: #3f3f3f;
-  border: solid black 3px;
+  border: solid black;
   font-family: 'Press Start 2P', cursive;
   font-size: 1em;
   text-align: center;
