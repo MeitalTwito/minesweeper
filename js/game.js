@@ -9,6 +9,7 @@ var gStoptime = true;
 
 // game elemnts
 var MINE = '<img src="img/mine.png">'
+var MINE_BOOM = '<span><img src="img/mine-boom.png"></span>'
 var FLAG = '🚩'
 var LIFE = '💛'
 var VICTORY = '😎'
@@ -144,6 +145,8 @@ function cellClicked(elcell, idxI, idxJ) {
 
         // User has 0 lives - Game Over 
         showCell(idxI, idxJ)
+        console.log(elcell.innerHTML);
+        elcell.innerHTML = MINE_BOOM
         gameOver()
     }
 
@@ -265,7 +268,7 @@ function revelBoard(board) {
     for (var i = 0; i < board.length; i++) {
         for (var j = 0; j < board[0].length; j++) {
             var currCell = board[i][j]
-            if (currCell.isShown) continue
+            if (currCell.isShown || !currCell.isMine) continue
             showCell(i, j)
         }
     }
