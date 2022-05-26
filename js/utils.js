@@ -92,6 +92,14 @@ function hideCell(idxI, idxJ) {
   elCellContent.classList.add('hidden')
 }
 
+function hideHint(idxI, idxJ) {
+  var elCell = document.getElementById(`${idxI},${idxJ}`);
+  elCell.classList.add('closed')
+  elCell.classList.remove('open')
+  var elCellContent = elCell.querySelector('span')
+  elCellContent.classList.add('hidden')
+}
+
 function markToggle(elCell, idxI, idxJ) {
   var cell = gBoard[idxI][idxJ]
   if (cell.isMarked) {
@@ -115,7 +123,6 @@ function markToggle(elCell, idxI, idxJ) {
 function markSafe(idxI, idxJ) {
   var elCell = document.getElementById(`${idxI},${idxJ}`);
   elCell.classList.add('safe')
-  console.log(elCell);
 
   setTimeout(() => {
     elCell.classList.remove('safe')

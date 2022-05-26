@@ -1,11 +1,13 @@
 'use strict'
 
+// timer variables
 var gStartTime = 0;
 var gEndTime = 0;
 const timer = document.getElementById('stopwatch');
 var gSec = 0;
 var gStoptime = true;
 
+// game elemnts
 var MINE = '<img src="img/mine.png">'
 var FLAG = '🚩'
 var LIFE = '💛'
@@ -29,9 +31,18 @@ var gIsVictory = false
 
 function init() {
     var elSmiley = document.querySelector('.smiley')
-    elSmiley.innerText = NORMAL 
+    elSmiley.innerText = NORMAL
     stopTimer()
     resetTimer()
+
+    var elSafeClickBtn = document.querySelector('.safe-click')
+    elSafeClickBtn.classList.add('avilable')
+    elSafeClickBtn.classList.remove('over')
+
+    var elHintBtn = document.querySelector('.hint')
+    elHintBtn.classList.add('avilable')
+    elHintBtn.classList.remove('on')
+    elHintBtn.classList.remove('over')
 
     gGame = {
         isFirstClick: true,
@@ -40,12 +51,16 @@ function init() {
         safeClicks: 3,
         shownCount: 0,
         markedCount: 0,
-        secsPassed: 0
+        hintIsOn: false,
+        hints: 3
     }
+
     updateLives()
+
     gBoard = buildBoard(gLevel.SIZE)
     renderBoard(gBoard, '.game-board')
 }
+
 
 function startGame(idxI, idxJ) {
     gGame.isOn = true
@@ -54,8 +69,6 @@ function startGame(idxI, idxJ) {
     setMinesNegsCount(gBoard)
     renderBoard(gBoard, '.game-board')
     showCell(idxI, idxJ)
-    // console.log(gBoard);
-
 }
 
 function buildBoard(size) {
@@ -74,21 +87,19 @@ function buildBoard(size) {
     return board;
 }
 
-
 function getMines(board, count, idxI, idxJ) {
     console.log('hello');
     for (var i = 0; i < count; i++) {
         var cellIdx = getEmptyCell(board)
-        if (idxI === cellIdx.i && cellIdx.j === idxJ){
-            i-- 
-            continue 
+        if (idxI === cellIdx.i && cellIdx.j === idxJ) {
+            i--
+            continue
             // continue for another round with the count wanted
-        } 
+        }
         var randCell = gBoard[cellIdx.i][cellIdx.j]
         randCell.isMine = true
     }
 }
-
 
 function setMinesNegsCount(board) {
     for (var i = 0; i < board.length; i++) {
@@ -110,10 +121,16 @@ function cellClicked(elcell, idxI, idxJ) {
 
     if (!gGame.isOn) return // if game is over retrn
 
+    // if hint mode is on, go to hint function and don't open the cell
+    if (gGame.hintIsOn) {
+        getHint(idxI, idxJ)
+        return
+    }
+
     var clickedCell = gBoard[idxI][idxJ]
     if (clickedCell.isShown) return // id cell is already open retrn
 
-    // If the cell clicked is a Mine
+    // If the cell clicked is a mine
     if (clickedCell.isMine) {
         // User has lives - make an alert sound and decrese lives
         if (gGame.lives > 0) {
@@ -154,15 +171,18 @@ function expandShown(idxI, idxJ) {
         for (var j = idxJ - 1; j <= idxJ + 1; j++) {
             if (i === idxI && j === idxJ) continue;
             if (j < 0 || j >= gBoard[i].length) continue;
+            
             // Model
             if (gBoard[i][j].isShown) continue;
             gBoard[i][j].isShown = true
             gGame.shownCount++
+            
             // Dom
             showCell(i, j)
 
-            if (gBoard[i][j].minesAroundCount === 0){
-                expandShown(i,j)
+            // BONUS - Full Expand 
+            if (gBoard[i][j].minesAroundCount === 0) {
+                expandShown(i, j)
             }
         }
     }
@@ -194,6 +214,7 @@ function cellMarked(ev, elCell) {
     }
 }
 
+// checks if the user won the game on each click (left or right)
 function checkVictory() {
     var winShowCount = gLevel.SIZE ** 2 - gLevel.MINES
     var winMarkCount = gLevel.MINES
@@ -206,24 +227,27 @@ function gameOver() {
     gGame.isOn = false;
     stopTimer()
     if (gIsVictory) {
-        elSmiley.innerText = VICTORY 
+        elSmiley.innerText = VICTORY
     } else {
-        elSmiley.innerText = LOSE 
+        elSmiley.innerText = LOSE
         revelBoard(gBoard)
     }
 
 }
 
+// when user clicks on smiley, reset the game
 function resetGame() {
-    init(gLevel.SIZE,gLevel.MINES)
+    init(gLevel.SIZE, gLevel.MINES)
 }
 
+// set the gBoard lvl to user choise 
 function userLevel(arr) {
     gLevel.SIZE = arr[0]
     gLevel.MINES = arr[1]
-    init(gLevel.SIZE,gLevel.MINES)
+    init(gLevel.SIZE, gLevel.MINES)
 }
 
+// if user clicks on a mine, update life count
 function updateLives() {
     var elLivesPane = document.querySelector('.lives')
 
@@ -235,36 +259,118 @@ function updateLives() {
     elLivesPane.innerText = lifeStr
 }
 
+// when game is over - show all board
 function revelBoard(board) {
-    for ( var i = 0; i < board.length; i++){
-        for (var j = 0; j < board[0].length; j++){
+    for (var i = 0; i < board.length; i++) {
+        for (var j = 0; j < board[0].length; j++) {
             var currCell = board[i][j]
             if (currCell.isShown) continue
-            showCell(i,j)
+            showCell(i, j)
         }
     }
-    
 }
 
-function safeClick(){
+// BONUS - Safe Clicks
+
+function safeClick() {
+    var elsafeClickBtn = document.querySelector('.safe-click')
     
-    if (!gGame.isOn) return
-    if ( gGame.safeClicks ===0) return
+    if (!gGame.isOn) return // makes sure game is on
+
+    if (gGame.safeClicks === 0) {
+        // if user has no clicks remining close the option and color btn red
+        elsafeClickBtn.classList.remove('avilable')
+        elsafeClickBtn.classList.add('over')
+        return
+    }
+
     var safeCells = []
-    for ( var i = 0; i < gBoard.length; i++){
-        for (var j = 0; j < gBoard[0].length; j++){
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard[0].length; j++) {
             var currCell = gBoard[i][j]
-            if (currCell.isShown || currCell.isMine) continue
-            var safeCell = {i,j}
+            if (currCell.isShown || currCell.isMine) continue // skips mines and open cells
+            // adds safe cell location to the arry
+            var safeCell = { i, j }
             safeCells.push(safeCell)
         }
     }
 
-    if (safeCells.length === 0) return
-    randIdx = getRandomInt(0, safeCells.length)
+
+    if (safeCells.length === 0) return // if no safe cells, return
+    randIdx = getRandomInt(0, safeCells.length) // get random idx for the cells array
     var safeCellI = safeCells[randIdx].i
     var safeCellJ = safeCells[randIdx].j
-    
+
+    // show user the safe cell
     markSafe(safeCellI, safeCellJ)
+
+    // makes the button red
+    if (gGame.safeClicks === 1) {
+        elsafeClickBtn.classList.remove('avilable')
+        elsafeClickBtn.classList.add('over')
+    }
+
+    // reduce the safe cells clicks amount
     gGame.safeClicks--
+}
+
+function hint(elHint) {
+    if (gGame.hints < 0) return
+    elHint.classList.add('on')
+    gGame.hintIsOn = true
+}
+
+
+// BONUS - Add support for HINTS
+function getHint(idxI, idxJ) {
+    for (var i = idxI - 1; i <= idxI + 1; i++) {
+        if (i < 0 || i >= gBoard.length) continue;
+        for (var j = idxJ - 1; j <= idxJ + 1; j++) {
+            if (i === idxI && j === idxJ) continue;
+            if (j < 0 || j >= gBoard[i].length) continue;
+            // Ignore shown cells
+            if (gBoard[i][j].isShown) continue;
+            // Show current Cell
+            showCell(i, j)
+
+        }
+        // Show chosen Cell
+        showCell(idxI, idxJ)
+    }
+    // hide hint after 1s
+    setTimeout(hideHints, 1000, idxI, idxJ)
+
+    // close hint mode and decrece hint count
+    gGame.hintIsOn = false
+    gGame.hints--
+    var elHintBtn = document.querySelector('.hint')
+    elHintBtn.classList.remove('on')
+
+    // if user has no hints color the btn red
+    if (gGame.hints === 0) {
+        elHintBtn.classList.add('over')
+
+    }
+}
+
+function hideHints(idxI, idxJ) {
+    for (var i = idxI - 1; i <= idxI + 1; i++) {
+        if (i < 0 || i >= gBoard.length) continue;
+        for (var j = idxJ - 1; j <= idxJ + 1; j++) {
+            if (i === idxI && j === idxJ) continue;
+            if (j < 0 || j >= gBoard[i].length) continue;
+            
+            // make sure open cells say open
+            if (gBoard[i][j].isShown) continue;
+           
+            // hide hint cells
+            hideHint(i, j)
+        }
+    }
+
+    // closes the selected cell, if was not alredy open
+    if(!gBoard[idxI][idxJ].isShown){
+        hideHint(idxI, idxJ)
+    }
+
 }

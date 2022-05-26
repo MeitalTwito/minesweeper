@@ -133,12 +133,25 @@ button {
   border: #111111 solid 2px;
 }
 
-button.safe-click {
+
+
+.avilable {
   background-color: #79a27b;
   box-shadow: -3px -7px 0px #526b53 inset;
 }
 
-button:hover {
-  box-shadow: 0px 0px 0px #a3a4a4 inset;
-  transition: 2s;
+.hint {
+  width: 50px;
+}
+
+.over {
+  background-color: #cd9591;
+  box-shadow: -3px -7px 0px #967371 inset;
+}
+
+
+
+.on {
+  box-shadow: 0px 0px 0px #526b53 inset;
+  transition: 0.5s;
 }
