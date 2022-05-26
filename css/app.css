@@ -1,6 +1,15 @@
+html{
+  height: 100%;
+}
+
 body {
+
   font-family: 'Assistant', sans-serif;
   text-align: center;
+  height: 100%;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   background: rgb(198, 209, 210);
   background: linear-gradient(0deg, rgba(198, 209, 210, 1) 40%, rgba(240, 241, 241, 1) 100%);
 }
@@ -68,7 +77,7 @@ body {
   background-color: #111111;
   box-shadow: 4px 2px 0px #2f2d2d inset;
   text-align: center;
-  font-size: 3em;
+  font-size: 2.5em;
   line-height: 74px;
 }
 
@@ -83,7 +92,7 @@ body {
 
 .game-board td {
   color: #3f3f3f;
-  border: solid black;
+  border: solid black 3px;
   font-family: 'Press Start 2P', cursive;
   font-size: 1em;
   text-align: center;

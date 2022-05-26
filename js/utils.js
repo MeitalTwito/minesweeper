@@ -110,11 +110,16 @@ function markToggle(elCell, idxI, idxJ) {
 
   } else {
     hideCell(idxI, idxJ)
-    var cellContent = (cell.isMine) ? MINE : cell.minesAroundCount
+
     var elCellContent = elCell.querySelector('span')
-    elCellContent.innerText = cellContent
+    if(cell.isMine) {
+      elCellContent.innerHTML = MINE
+    } else{
+      var cellContent = (cell.minesAroundCount === 0) ? '': cell.minesAroundCount
+      elCellContent.innerText = cellContent
+    }
+   
     gGame.markedCount--
-    console.log(cell);
   }
 
 }
