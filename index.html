@@ -8,33 +8,58 @@
     <title>MineSweeper</title>
     <link rel="stylesheet" href="css/app.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Assistant&family=Orbitron&display=swap');
-    </style>
+        @import url('https://fonts.googleapis.com/css2?family=Assistant&family=Press+Start+2P&display=swap');
+        </style>
 </head>
 
 <body onload="init()">
-    <h1>Sprint 1 - MineSweeper</h1>
-    <div id="stopwatch" class="stopwatch">
-        000
+    <h1>MINESWEEPER</h1>
+
+    <div class="window">
+        <div class="game-data">
+            <div id="stopwatch" class="stopwatch">
+                000
+            </div>
+
+            <div onclick="resetGame()" class="smiley">
+
+                😄
+            </div>
+            <div class="lives">
+                💛💛💛
+            </div>
+        </div>
+
+
+        <div class="game">
+            <table oncontextmenu="return false" class="game-holder">
+
+                <tbody class="game-board">
+
+                </tbody>
+
+            </table>
+        </div>
+
+        <div class="btn-holder">
+            <button onclick="userLevel([4,2])">Beginner</button>
+            <button onclick="userLevel([8,12])">Medium</button>
+            <button onclick="userLevel([12,30])">Expert</button>
+            <button class="safe-click" onclick="safeClick()">Safe Click</button>
+
+        </div>
     </div>
 
-    <div class="game-container">
-        <table class="game-board" oncontextmenu="return false">
+    <div class="footer">
+        Created by <a href="https://www.facebook.com/meital.twito">Meital Twito</a> | CodingAcademy May 2022
+    </div>
 
-        </table>
-    </div>
-    <div class="level">
-        <button onclick="init(4,2)">Beginner</button>
-        <button onclick="init(8,12)">Medium</button>
-        <button onclick="init(12,30)">Expert</button>
-    </div>
-    <div class="rest">
-        <h2>hello</h2>
-        <button onclick="resetGame()">Play Again</button>
-    </div>
+
+
     <script src="js/utils.js"></script>
     <script src="js/game.js"></script>
 
 </body>
 
 </html>
+
