@@ -83,7 +83,7 @@ body {
 
 .game-board td {
   color: #3f3f3f;
-  border: solid black;
+  border: solid black 3px;
   font-family: 'Press Start 2P', cursive;
   font-size: 1em;
   text-align: center;
