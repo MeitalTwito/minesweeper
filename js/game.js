@@ -321,8 +321,6 @@ function undo() {
             hideCell(lastMoveLocation.i, lastMoveLocation.j)
             lastCell.isShown = false
         }
-
-
     }
 
     if (lastCell.isMarked) {

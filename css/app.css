@@ -102,6 +102,7 @@ body {
 }
 
 .closed {
+
   background-color: #c5d4d4;
   box-shadow: -3px -4px 0px #a3a4a4 inset;
 }
@@ -133,6 +134,7 @@ span.hidden {
 }
 
 button {
+  cursor: pointer;
   color: black;
   height: 50px;
   width: 100px;
