@@ -8,13 +8,14 @@ var gSec = 0;
 var gStoptime = true;
 
 // game elemnts
-var MINE = '<img src="img/mine.png">'
+var MINE = '<span><img src="img/mine.png"></span>'
 var MINE_BOOM = '<span><img src="img/mine-boom.png"></span>'
 var FLAG = '🚩'
-var LIFE = '💛'
+var LIFE = '🛟'
 var VICTORY = '😎'
 var NORMAL = '😀'
 var LOSE = '🤯'
+var WRONG = '❌'
 
 // The model - Matrix containing cell objects: 
 var gBoard
@@ -129,9 +130,9 @@ function cellClicked(elcell, idxI, idxJ) {
         return
     }
 
-    
+
     if (clickedCell.isShown) return // if cell is already open return
-     // if cell is flaged return
+    // if cell is flaged return
     // If the cell clicked is a mine
     if (clickedCell.isMine) {
         // User has lives - make an alert sound and decrese lives
@@ -175,12 +176,12 @@ function expandShown(idxI, idxJ) {
         for (var j = idxJ - 1; j <= idxJ + 1; j++) {
             if (i === idxI && j === idxJ) continue;
             if (j < 0 || j >= gBoard[i].length) continue;
-            
+
             // Model
             if (gBoard[i][j].isShown) continue;
             gBoard[i][j].isShown = true
             gGame.shownCount++
-            
+
             // Dom
             showCell(i, j)
 
@@ -268,8 +269,23 @@ function revelBoard(board) {
     for (var i = 0; i < board.length; i++) {
         for (var j = 0; j < board[0].length; j++) {
             var currCell = board[i][j]
+
+            if (currCell.isMarked) {
+                var elCell = document.getElementById(`${i},${j}`)
+                if (currCell.isMine) {
+                    elCell.innerHTML = MINE
+
+                } else {
+                    elCell.innerText = WRONG
+                    console.log(elCell);
+                }
+
             if (currCell.isShown || !currCell.isMine) continue
             showCell(i, j)
+
+
+
+            }
         }
     }
 }
@@ -278,7 +294,7 @@ function revelBoard(board) {
 
 function safeClick() {
     var elsafeClickBtn = document.querySelector('.safe-click')
-    
+
     if (!gGame.isOn) return // makes sure game is on
 
     if (gGame.safeClicks === 0) {
@@ -363,17 +379,17 @@ function hideHints(idxI, idxJ) {
         for (var j = idxJ - 1; j <= idxJ + 1; j++) {
             if (i === idxI && j === idxJ) continue;
             if (j < 0 || j >= gBoard[i].length) continue;
-            
+
             // make sure open cells say open
             if (gBoard[i][j].isShown) continue;
-           
+
             // hide hint cells
             hideHint(i, j)
         }
     }
 
     // closes the selected cell, if was not alredy open
-    if(!gBoard[idxI][idxJ].isShown){
+    if (!gBoard[idxI][idxJ].isShown) {
         hideHint(idxI, idxJ)
     }
 
