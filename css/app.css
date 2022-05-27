@@ -133,6 +133,7 @@ span.hidden {
 }
 
 button {
+  color: black;
   height: 50px;
   width: 100px;
   background-color: #c5d4d4;
@@ -148,23 +149,21 @@ button {
 }
 
 .hint {
-  width: 50px;
+    width: 50px;
   
 }
 
 .undo{
 
   width: 50px;
-  background-color: #8a79a2;
-  box-shadow: -3px -7px 0px #494055 inset;
+  background-color: #c35a39;
+  box-shadow: -3px -7px 0px #6f3321 inset;
 }
 
 .over {
   background-color: #cd9591;
   box-shadow: -3px -7px 0px #967371 inset;
 }
-
-
 
 .on {
   box-shadow: 0px 0px 0px #526b53 inset;
