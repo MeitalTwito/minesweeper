@@ -476,10 +476,12 @@ function hideHints(idxI, idxJ) {
 function toggleZoom(num) {
     switch (num) {
         case 1:
+            if(gZoom > 150) return
             gZoom += 10
             break;
 
         case 0:
+            if (gZoom < 50) return
             gZoom -= 10
             break;
     }
