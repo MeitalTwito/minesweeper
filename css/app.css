@@ -128,10 +128,8 @@ span.hidden {
 
 
 .btn-holder {
-  position: absolute;
   text-align: center;
-  width: 540px;
-  margin: auto;
+  width: 530px;
 }
 
 button {
@@ -151,6 +149,14 @@ button {
 
 .hint {
   width: 50px;
+  
+}
+
+.undo{
+
+  width: 50px;
+  background-color: #8a79a2;
+  box-shadow: -3px -7px 0px #494055 inset;
 }
 
 .over {

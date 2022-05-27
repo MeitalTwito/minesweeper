@@ -87,6 +87,7 @@ function showCell(idxI, idxJ) {
 function hideCell(idxI, idxJ) {
   var elCell = document.getElementById(`${idxI},${idxJ}`);
   elCell.classList.add('closed')
+  elCell.classList.remove('open')
   elCell.classList.remove('marked')
   var elCellContent = elCell.querySelector('span')
   elCellContent.classList.add('hidden')

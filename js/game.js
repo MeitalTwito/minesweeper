@@ -20,6 +20,9 @@ var WRONG = '❌'
 // The model - Matrix containing cell objects: 
 var gBoard
 
+// Moves records - an Array with all cells clicked by order:
+var gMoves
+
 
 // Determins the Mat Size and number of mines
 var gLevel = {
@@ -36,6 +39,8 @@ function init() {
     elSmiley.innerText = NORMAL
     stopTimer()
     resetTimer()
+
+    gMoves = []
 
     var elSafeClickBtn = document.querySelector('.safe-click')
     elSafeClickBtn.classList.add('avilable')
@@ -70,7 +75,6 @@ function startGame(idxI, idxJ) {
     getMines(gBoard, gLevel.MINES, idxI, idxJ)
     setMinesNegsCount(gBoard)
     renderBoard(gBoard, '.game-board')
-    showCell(idxI, idxJ)
 }
 
 function buildBoard(size) {
@@ -168,6 +172,9 @@ function cellClicked(elcell, idxI, idxJ) {
     if (gIsVictory) {
         gameOver()
     }
+
+    gMoves.push({ i: idxI, j: idxJ })
+    console.log(gMoves);
 }
 
 function expandShown(idxI, idxJ) {
@@ -178,7 +185,7 @@ function expandShown(idxI, idxJ) {
             if (j < 0 || j >= gBoard[i].length) continue;
 
             // Model
-            if (gBoard[i][j].isShown) continue;
+            if (gBoard[i][j].isShown || gBoard[i][j].isMarked) continue;
             gBoard[i][j].isShown = true
             gGame.shownCount++
 
@@ -197,6 +204,7 @@ function expandShown(idxI, idxJ) {
 function cellMarked(ev, elCell) {
     // if not right click return
     if (ev.which !== 3) return
+    if (!gGame.isOn) return
 
     // find cell location on model
     var location = elCell.id.split(',')
@@ -217,6 +225,9 @@ function cellMarked(ev, elCell) {
     if (gIsVictory) {
         gameOver()
     }
+
+    gMoves.push({ i: cellI, j: cellJ })
+    console.log(gMoves);
 }
 
 // checks if the user won the game on each click (left or right)
@@ -280,14 +291,79 @@ function revelBoard(board) {
                     console.log(elCell);
                 }
 
-            if (currCell.isShown || !currCell.isMine) continue
-            showCell(i, j)
+                if (currCell.isShown || !currCell.isMine) continue
+                showCell(i, j)
 
 
 
             }
         }
     }
+}
+
+
+// BONUS - UNDO
+
+function undo() {
+    if (!gGame.isOn) return
+    if (gMoves.length === 0) return
+    var lastMoveLocation = gMoves.pop()
+    var lastCell = gBoard[lastMoveLocation.i][lastMoveLocation.j]
+
+    if (lastCell.isShown) {
+        if (lastCell.minesAroundCount !== 0) {
+            hideCell(lastMoveLocation.i, lastMoveLocation.j)
+            lastCell.isShown = false
+            gGame.shownCount--
+        } else {
+            // console.log('we need recursion');
+            expandHide(lastMoveLocation.i, lastMoveLocation.j)
+            hideCell(lastMoveLocation.i, lastMoveLocation.j)
+            lastCell.isShown = false
+        }
+
+
+    }
+
+    if (lastCell.isMarked) {
+        var elCell = document.getElementById(`${lastMoveLocation.i},${lastMoveLocation.j}`)
+        lastCell.isMarked = false
+        markToggle(elCell, lastMoveLocation.i, lastMoveLocation.j)
+
+    }
+    console.log(gGame.shownCount);
+}
+
+// closes the cells in recursion
+function expandHide(idxI, idxJ) {
+    for (var i = idxI - 1; i <= idxI + 1; i++) {
+        if (i < 0 || i >= gBoard.length) continue;
+        for (var j = idxJ - 1; j <= idxJ + 1; j++) {
+            if (i === idxI && j === idxJ) continue;
+            if (j < 0 || j >= gBoard[i].length) continue;
+
+            // Model
+            if (!gBoard[i][j].isShown || gBoard[i][j].isMarked) continue;
+            if (checkIfOlderMove(i, j)) continue;
+            gBoard[i][j].isShown = false
+            gGame.shownCount--
+            // DOM
+            hideCell(i, j)
+ 
+            if (gBoard[i][j].minesAroundCount === 0) {
+                expandHide(i, j)
+            }
+        }
+    }
+}
+
+// if cell was open before the recursion, the hide recursion skips it
+function checkIfOlderMove(idxI, idxJ) {
+    for (var i = 0; i < gMoves.length; i++) {
+        if (gMoves[i].i === idxI && gMoves[i].j === idxJ)
+            return true
+    }
+    return false
 }
 
 // BONUS - Safe Clicks
