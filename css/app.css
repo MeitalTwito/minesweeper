@@ -1,9 +1,9 @@
-html{
+html {
   height: 100%;
 }
 
 body {
-
+  zoom: 100%;
   font-family: 'Assistant', sans-serif;
   text-align: center;
   height: 100%;
@@ -12,6 +12,21 @@ body {
   background-attachment: fixed;
   background: rgb(198, 209, 210);
   background: linear-gradient(0deg, rgba(198, 209, 210, 1) 40%, rgba(240, 241, 241, 1) 100%);
+}
+
+.zoom {
+  position: absolute;
+  margin-left: 280px;
+  display: inline;
+}
+
+.zoom-btn {
+  font-size: 1.4em;
+  width: 30px;
+  height: 30px;
+  background-color: #848383;
+    box-shadow: -3px -4px 0px #3a4747 inset;
+    border: #111111 solid 2px;
 }
 
 .window {
@@ -145,17 +160,18 @@ button {
 
 
 
+
 .avilable {
   background-color: #79a27b;
   box-shadow: -3px -7px 0px #526b53 inset;
 }
 
 .hint {
-    width: 50px;
-  
+  width: 50px;
+
 }
 
-.undo{
+.undo {
 
   width: 50px;
   background-color: #c35a39;
@@ -171,3 +187,4 @@ button {
   box-shadow: 0px 0px 0px #526b53 inset;
   transition: 0.5s;
 }
+

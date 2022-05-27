@@ -7,6 +7,9 @@ const timer = document.getElementById('stopwatch');
 var gSec = 0;
 var gStoptime = true;
 
+// controls the display zoom
+var gZoom = 100
+
 // game elemnts
 var MINE = '<span><img src="img/mine.png"></span>'
 var MINE_BOOM = '<span><img src="img/mine-boom.png"></span>'
@@ -347,7 +350,7 @@ function expandHide(idxI, idxJ) {
             gGame.shownCount--
             // DOM
             hideCell(i, j)
- 
+
             if (gBoard[i][j].minesAroundCount === 0) {
                 expandHide(i, j)
             }
@@ -467,4 +470,18 @@ function hideHints(idxI, idxJ) {
         hideHint(idxI, idxJ)
     }
 
+}
+
+// controls the display size to fit diffrent screens
+function toggleZoom(num) {
+    switch (num) {
+        case 1:
+            gZoom += 10
+            break;
+
+        case 0:
+            gZoom -= 10
+            break;
+    }
+    document.body.style.zoom = `${gZoom}%`
 }
